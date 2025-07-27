@@ -1,0 +1,234 @@
+ @import url('https://fonts.googleapis.com/css2?family=Albert+Sans');
+
+:root {
+    --dark-pink: #FF8FAB;
+    --mid-pink: #FFB3C6;
+    --light-pink: #FFD6E0;
+    --green: #C7F3A5;
+    --brown: #C2725B;
+    --beige: #F4E5E1;
+}
+
+body {
+    background-color: black;
+    color: var(--beige);
+    font-family: 'Albert Sans', Arial, sans-serif;
+    font-weight: normal;
+}
+
+h1 {
+    font-weight: normal;
+    display: inline-block;
+    margin-top:0;
+    position: absolute;
+    top: 0px;}
+
+nav {
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    right: 0px;}
+
+.clickable-img {
+    display: inline-block; 
+    z-index: 1;
+}
+
+nav ul {
+    color: var(--light-pink);
+    list-style-type: none;
+    padding: 1vw;
+    font-size: 1vw;
+}
+
+nav ul li {
+    background-color: var(--dark-pink);
+    padding: 1vw;
+    margin: 0.1vw;
+    width: 8vw;
+}
+.profile {
+    width: 8vw;
+    margin:0.5vw;
+}
+
+#player {
+    background-color: var(--green);
+    color: var(--brown);
+    width: 80vw;
+    padding: 1vw;
+}
+
+#player i {
+    color: var(--dark-pink);
+}
+
+#lyrics {
+    background-color: var(--light-pink);
+    color: var(--dark-pink);
+    width: 80vw;
+    padding: 1vw;
+}
+.scroll {
+    color: var(--brown);
+    overflow: scroll;
+    overflow-x: hidden;
+    scrollbar-color: var(--dark-pink) var(--light-pink);
+    white-space: pre-line;
+}
+.artist_img {
+    width: 1.8vw;
+    border-radius:1vw;
+    vertical-align: middle;
+}
+
+#artist_info {
+    background-color: var(--dark-pink);
+    color: black;
+    padding: 1vw;
+}
+
+.queue {
+    background-color: var(--mid-pink);
+    color: var(--brown);
+    width: 40vw;
+    padding: 1vw;
+}
+.queue li {
+    border: 2px solid var(--dark-pink);
+    padding: 0.4vw;
+    margin: 0.1vw 0;
+}
+
+#artist_info h3 {
+    color: var(--beige);
+}
+
+a {
+    color: inherit;
+}
+
+.album-cover {
+    width: 25vw;
+    border-radius: 5vw;
+}
+
+.delete {
+    position: relative;
+    float: right;
+}
+
+#library ul {
+    display: flex;
+    list-style-type: none;
+    flex-flow: row wrap;
+}
+
+#library ul li {
+    margin: 2vw;
+}
+
+.albumCoverLibrary {
+    height: 10vw;
+    width: 10vw;
+    border-radius: 2vw;
+}
+
+.albumCoverLibraryLink {
+    display: inline-block;
+}
+
+.textContainer {
+    vertical-align: top;
+    display: inline-block;
+    height: 10vw;
+}
+
+.albumName {
+    vertical-align: top;
+    position: relative;
+    top: 0.2vw;
+}
+
+.albumArtist {
+    vertical-align: bottom;
+    text-align: left;
+    position: relative;
+    //bottom: -7vw;
+}
+
+.genres {
+    background-color: var(--dark-pink);
+    padding: 1vw;
+}
+
+@media screen and (min-width:800px){
+    .logo {
+        width: 10vw;
+        display: inline-block;
+        pointer-events: none;
+        z-index: -1;
+    }
+    header h1 {
+        font-size: 8vw;
+    }
+    #lyrics{
+        width: 40vw;
+        height: 40vh;
+    }
+    .scroll {
+        height: 34vh;
+    }
+    #library ul li {
+        margin: 2vw;
+        //width: 15vw;
+    }
+    #artist_info, #player, #lyrics, .queue, .genres {
+        margin: 0.5vw;
+        border-radius: 2vw;
+        width: 40vw;
+    }
+}
+
+
+@media screen and (max-width: 799px){
+    .logo {
+        width: 10vw;
+        display: inline-block;
+        pointer-events: none;
+        z-index: -1;
+    }
+    header h1 {
+        font-size: 8vw;
+    }
+    #lyrics{
+        height: 70vh;
+    }
+    .scroll {
+        height: 60vh;
+    }
+    article {
+        margin-bottom: 6vw;
+    }
+    #artist_info, #player, #lyrics, .queue, .genres {
+        margin: 0.5vw;
+        border-radius: 6vw;
+        width: 92vw;
+    }
+    #player {
+        margin-top: 16vh;
+    }
+    #library ul li {
+        margin: 2vw;
+        width: 30vw;
+    }
+    .artist_img {
+    width: 5vw;
+    border-radius:2.5vw;
+    vertical-align: middle;
+    }
+}
+
+
+
+
