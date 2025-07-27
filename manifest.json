@@ -1,0 +1,22 @@
+{
+  "short_name": "Spremium",
+  "name": "Spremium albumification project",
+  "icons": [
+    {
+      "src": "/static/images/jack_russell_basic.svg",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "minimal-ui",
+  "theme_color": "#FF8FAB",
+  "background_color": "#000000",
+  "screenshots": [
+    {
+      "src":"/static/images/tennis_ball.svg",
+      "form_factor":"wide"
+      }
+  ]
+}
