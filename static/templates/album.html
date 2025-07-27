@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h2>{{session['album'][1]}}
+    {% if session['album'][4] == 1 %}
+        <i class="fa-regular fa-circle-check"></i>
+    {% endif %}</h2><br>
+    <img class='album-cover' 
+    {% if session['album'][2][0] == '.' %}
+        src='{{session['album'][2][1:]}}'
+    {% else %}
+        src='{{session['album'][2]}}'
+    {% endif %}
+    >
+    {% include 'music_player.html' %}
+    <span>Play this album now: <i id='albumButton' onclick="startAlbum()" class="fa-solid fa-play"></i></span>
+    <span>Add album to queue: <i id='albumLaterButton' onclick="startAlbumLater()" class="fa-solid fa-list"></i></span>
+    <ul>
+        {% for song in session['album_songs'] %}
+            <li><a href='/song/{{song[0]}}'>{{song[1]}}</a></li>
+        {% endfor %}
+    </ul>
+
+    <form id='songsToAdd' name='songsToAdd' action='/addToQueue' method='post' hidden>
+        {% for song in session['album_songs'] %}
+            <input type='checkbox' name='song' id='song' value='{{song[0]}}' checked>
+        {% endfor %}
+    </form>
+
+    <form id='songsToAddLater' name='songsToAddLater' action='/addToQueueBottom' method='post' hidden>
+        {% for song in session['album_songs'] %}
+            <input type='checkbox' name='song_id' id='song_id' value='{{song[0]}}' checked>
+        {% endfor %}
+    </form>
+{% endblock %}

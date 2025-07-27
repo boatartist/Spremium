@@ -1,0 +1,15 @@
+{% block queue %}
+    <article class='queue'>
+        <h3>Queue</h3>
+        <ol>
+        {% for song in session['queue'] %}
+            {% set song_data = session['songs'].get(song, ["song name here", 'artist id']) %}
+            {% set artist_data = session['artists'].get(song_data[1]|string, ['[artist name]', 'https://127-0-0-1-5000-a8cdl4t0stubdi6joroo857ffg.au.edusercontent.com/static/images/jack_russell_basic.svg']) %}
+            <li>{{song_data[0]}}: <i>{{artist_data[0]}}</i> <img src='{{artist_data[1]}}' class='artist_img'> <i onclick='deleteFromQueue({{loop.index0}})' class="delete fa-solid fa-xmark"></i></li>
+        {% endfor %}
+        </ol>
+        <form id='deleteThisSong' name='deleteThisSong' action='/deleteFromQueue' method='post' hidden>
+            <input type='range' id='songIndex' name='songIndex'>
+        </form>
+    </article>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block main %}
+    <h2>New Playlist</h2>
+    <form method='post' name='playlist' id='playlist' enctype="multipart/form-data">
+        <label for='playlist_name'>Playlist Name: </label><input type='text' id='playlist_name' name='playlist_name' value="New Playlist" required><br>
+        <label for='file'>Cover Image: </label><input type='file' accept='image/*' name='file' id='file'><br>
+        <label for='songs'>Songs in playlist: </label>
+        <select id='songs' name='songs' multiple required>
+            {% for song in session['songs'] %}
+                <option value='{{song}}'>{{session['songs'][song][0]}}</option>
+            {% endfor %}
+        </select><br>
+        <button type='submit'>Create Playlist</button>
+    </form>
+{% endblock %}

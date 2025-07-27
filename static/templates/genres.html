@@ -1,0 +1,33 @@
+{% block genres %}
+    <article id='genres' class='genres'>
+        <h3>find songs friday!!!</h3>
+        <button onclick='random_genre()'>Random Genre</button>
+        <div id='example_song'>
+            <image id='genre_image' onerror='this.src = "/static/images/jack_russell_basic.svg"' class='logo'>
+            <p id='genre_name'></p>
+            <p>Example of <span id='genre_name_2'><span>:</p>
+            <p id='example_song_name'></p>
+        </div>
+        <ul class='genre_block' hidden>
+            {% for genre in session['genres'] %}
+                <li id='rand_genre'>{{genre}}</li>
+            {% endfor %}
+        </ul>
+        <ul class='songs_block' hidden>
+            {% for song_id in session['songs'] %}
+                <li id='genred_song'>
+                    <span id='genre'>{{session['songs'][song_id][2]}}</span>
+                    <span id='name'>{{session['songs'][song_id][0]}}</span>
+                    <span id='genred_song_id'>{{song_id}}</span>on
+                    {% if session['artists'].get(session['songs'][song_id][1]) %}
+                        <span id='artist_name'>{{session['artists'][session['songs'][song_id][1]][0]}}</span>
+                        <span id='artist_img'>{{session['artists'][session['songs'][song_id][1]][1]}}</span>
+                    {% else %}
+                        <span id='artist_name'>{{session['artists'][session['songs'][song_id][1]|string][0]}}</span>
+                        <span id='artist_img'>{{session['artists'][session['songs'][song_id][1]|string][1]}}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </article>
+{% endblock %}

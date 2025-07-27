@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    {% include 'music_player.html' %}
+
+    {% if session.get('song_data') %}
+        <h2>{{session['song_data'][1]}}</h2>
+        <h3>{{session['artist_data'][1]}}</h3>
+    {% else %}
+        <h2>{{session['current_song']['song_data'][1]}}</h2>
+        <h3>{{session['current_song']['artist_data'][1]}}</h3>
+    {% endif %}
+    <span>Play this song: <i id='albumButton' onclick="startAlbum()" class="fa-solid fa-play"></i></span>
+    <span>Add song to queue: <i id='albumLaterButton' onclick="startAlbumLater()" class="fa-solid fa-list"></i></span>
+    {% include 'lyrics.html' %}
+
+    {% include 'artist_info.html' %}
+
+    {% include 'queue.html' %}
+    <form id='songsToAdd' name='songsToAdd' action='/addToQueue' method='post' hidden>
+        <input type='checkbox' name='song' id='song'
+        {% if session.get('song_data') %}
+             value='{{session['song_data'][0]}}' 
+        {% else %}
+            value='{{session['current_song']['song_data'][0]}}'
+        {% endif %}
+        checked>
+    </form>
+    <form id='songsToAddLater' name='songsToAddLater' action='/addToQueueBottom' method='post' hidden>
+        <input type='checkbox' name='song_id' id='song_id' 
+        {% if session.get('song_data') %}
+            value='{{session['song_data'][0]}}'
+            {% else %}
+            value='{{session['current_song']['song_data'][0]}}'
+        {% endif %}
+        checked>
+    </form>
+{% endblock %}

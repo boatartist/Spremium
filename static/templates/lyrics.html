@@ -1,0 +1,12 @@
+{% block lyrics %}
+    <article id='lyrics'>
+        <h3>Lyrics</h3>
+        <div class='scroll'>
+            {% if session.get('song_data') %}
+                <p>{{session['song_data'][2]}}</p>
+            {% else%}
+                <p>{{session['current_song']['song_data'][2]}}</p>
+            {% endif %}
+        </div>
+    </article>
+{% endblock %}

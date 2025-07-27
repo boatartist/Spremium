@@ -1,0 +1,27 @@
+{% block library %}
+    <article id='library' name='library'>
+        <h2>my library</h2>
+        <ul>
+            {% for album in session['albums'] %}
+                <li><a href='/album/{{album[0]}}' class='albumCoverLibraryLink'><img src='{{album[2]}}' class='albumCoverLibrary'></a> 
+                <div class='textContainer'>
+                    <span id='albumName' class='albumName'>{{album[1]}}</span><br>
+                    {% set key = album[3] %}
+                    {% if session['artists'].get(key) %}
+                        {% set thing = session['artists'][key] %}
+                    {% else %}
+                        {% set thing = session['artists'][key|string] %}
+                    {% endif %}
+                    <span id='albumArtist' class='albumArtist'><img src='{{thing[1]}}' class='artist_img'>{{thing[0]}}</span>
+                </div>
+                </li>
+            {% endfor %}
+
+            <li><a href='/newPlaylist' class='albumCoverLibraryLink'><img src='https://127-0-0-1-5000-a8cdl4t0stubdi6joroo857ffg.au.edusercontent.com/static/images/add.svg' class='albumCoverLibrary'></a>
+            <div class='textContainer'>
+                <span id='albumName' class='albumName'>New Playlist</span>
+            </div>
+            </li>
+        </ul>
+    </article>
+{% endblock %}

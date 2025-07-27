@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>Spremium | {% block page_title %}Home{% endblock %}</title>
+        <link rel='stylesheet' href='/static/style.css'>
+        <link rel='manifest' href='/manifest.json'>
+        <script src="https://kit.fontawesome.com/d811195f9a.js" crossorigin="anonymous"></script>    
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        <header>
+            <a class='clickable-img' href='/'><object data='/static/images/jack_russell_basic.svg' class='logo'></object></a>
+            <h1>Spremium</h1>
+            <nav>
+                <span id='profile' onmouseover='showNavBar()' onmouseout='hideNavBar()' class='clickable-img'><object data='/static/images/tennis_ball.svg' class='profile'></object></profile>
+                <ul id='navbar'>
+                    <li id='logged_as' style='display:none;'>Logged in as {{session.get('name', '')}}</li>
+                    <li id='account' style='display:none;'><a>Account</a></li>
+                    <li id='logout' style='display:none;'><a href='/logout'>Logout</a></li>
+                    <li id='login' style='display:none;'><a href='/login'>Sign in</a></li>
+                    <li id='register' style='display:none;'><a href='/register'>Create account</a></li>
+                    <li id='admin' style='display:none;'><a href='/admin'>Admin page</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            {% with messages = get_flashed_messages() %}
+                <p>{{ ''.join(messages) }}</p>
+            {% endwith %}
+
+            {% block main %}
+                <p>Hello this is Spremium I do not have any content yet</p><br>
+            {% endblock %}
+        <p id='user_id' name='user_id' hidden>{{session.get('id','')}}</p>
+        <p id='is_admin' name='is_admin' hidden>{{session.get('is_admin', 0)}}</p>
+        </main>
+    </body>
+    <script src='/static/app.js'></script>
+</html>

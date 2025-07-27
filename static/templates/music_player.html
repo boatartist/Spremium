@@ -1,0 +1,18 @@
+{% block music_player %}
+    <article id='player'>
+        <audio id='audio_source' >
+            <source src='/static/music/{{session['current_song']['song_data'][0]}}.mp3' type='audio/mpeg'>
+        </audio>
+        <span>{{session['current_song']['song_data'][1]}}</span><br>
+        <img src='{{session['current_song']['artist_data'][8]}}' class='artist_img'> <span>{{session['current_song']['artist_data'][1]}}</span>
+        <i id='restart' onclick='restartSong()' class="fa-solid fa-backward-step"></i>
+        <i id='playbutton' onclick="swapPlay()" class="fa-solid fa-play" value='paused'></i> 
+        <i id='skip' onclick='nextSong()' class="fa-solid fa-forward-step"></i>
+        <span id='timestamp'>00:00 / 00:00</span>
+        <input type='range' class='timeslider' min='0' id='timeslider' disabled>
+        <form method='post' id='updateTime' action='/updateTime' hidden>
+            <input type='url' id='new_url' name='new_url'>
+            <input type='range' id='start_time' name='start_time' value='{{session['current_song']['time_seconds']}}' hidden>
+        </form>
+    </article>
+{% endblock %}

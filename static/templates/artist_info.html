@@ -1,0 +1,13 @@
+{% block artist_info %}
+    <article id='artist_info'>
+        {% if session.get('artist_data') %}
+            <h3>About {{session['artist_data'][1]}}</h3>
+            <img src='{{session['artist_data'][8]}}' class='artist_img'>
+            <p>{{session['artist_data'][6]}}</p>
+        {% else %}
+            <h3>About {{session['current_song']['artist_data'][1]}}</h3>
+            <img src='{{session['current_song']['artist_data'][8]}}' class='artist_img'>
+            <p>{{session['current_song']['artist_data'][6]}}</p>
+        {% endif %}
+    </article>
+{% endblock %}
