@@ -61,13 +61,6 @@ connection.commit()
 
 salt = '|ab5&*.)' #randomised salt used for hashing passwords
 
-#when database has been deleted/on first run this creates the 'admin' user with login 'admin@admin.com' and password 'admin'
-if len(connection.execute(text('SELECT * FROM Users;')).fetchall()) <= 0:
-    hashed = hashlib.sha256(('admin'+salt).encode()).hexdigest()
-    query = text(f'INSERT INTO Users(name, email, is_admin, password_hash) VALUES("admin", "admin@admin.com", "1", "{hashed}");')
-    connection.execute(query)
-    connection.commit()
-
 #a function to create an artist from a given tadb_id and save it to the database
 def create_artist(artist):
     path = f'https://www.theaudiodb.com/api/v1/json/2/artist.php?i={artist}'
@@ -80,6 +73,88 @@ def create_artist(artist):
     query = text('INSERT INTO Users(name, description, tadb_id, image_file) VALUES(:name, :description, :tadb_id, :image_file);')
     connection.execute(query, {'name':name, 'description':description, 'tadb_id':artist, 'image_file':image_file})
     connection.commit()
+
+#function to add song to database
+def create_song(tadb_id, lyrics=None):
+    path = f'https://www.theaudiodb.com/api/v1/json/2/track.php?h={tadb_id}?lan=en'
+    headers = {"x-rapidapi-host": "theaudiodb.p.rapidapi.com"}
+    response = requests.get(path, headers=headers).json()
+    name = response['track'][0]['strTrack']
+    artist = response['track'][0]['idArtist']
+    if not connection.execute(text('SELECT * FROM Users WHERE tadb_id=:artist;'), {'artist':artist,}).fetchall():
+        create_artist(artist)
+    if not lyrics:
+        lyrics = response['track'][0]['strTrackLyrics']
+    genre = response['track'][0]['strGenre']
+    print(name, artist, lyrics, genre)
+    query = text('INSERT INTO Songs(tadb_id, name, lyrics, artist, genre) VALUES (:tadb_id, :name, :lyrics, :artist, :genre);')
+    connection.execute(query, {'tadb_id':tadb_id, 'name':name, 'lyrics':lyrics, 'artist':artist, 'genre':genre})
+    connection.commit()
+
+#when database has been deleted/on first run this creates the 'admin' user with login 'admin@admin.com' and password 'admin'
+#also give information for default song and artist (never gonna give you up/Rick Astley)
+if len(connection.execute(text('SELECT * FROM Users;')).fetchall()) <= 0:
+    #creating admin
+    hashed = hashlib.sha256(('admin'+salt).encode()).hexdigest()
+    query = text(f'INSERT INTO Users(name, email, is_admin, password_hash) VALUES("admin", "admin@admin.com", "1", "{hashed}");')
+    connection.execute(query)
+    #creating never gonna give you up (file manually installed)
+    query = text
+    connection.commit()
+    create_artist('112884')
+    create_song('32861727', '''We're no strangers to love
+You know the rules and so do I
+A full commitment's what I'm thinkin' of
+You wouldn't get this from any other guy
+
+I just wanna tell you how I'm feeling
+Gotta make you understand
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you
+
+We've known each other for so long
+Your heart's been aching, but you're too shy to say it
+Inside, we both know what's been going on
+We know the game and we're gonna play it
+
+And if you ask me how I'm feeling
+Don't tell me you're too blind to see
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you
+
+We've known each other for so long
+Your heart's been aching, but you're too shy to say it
+Inside, we both know what's been going on
+We know the game and we're gonna play it
+
+I just wanna tell you how I'm feeling
+Gotta make you understand
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you
+
+Never gonna give you up, never gonna let you down
+Never gonna run around and desert you
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you''')
 
 #flask setup
 app = Flask(__name__, static_folder='static', template_folder='static/templates') 
@@ -134,11 +209,12 @@ def startup():
 def current_song(song_id = '32861727', album=None):
     song = {}
     query = text(f'SELECT * FROM Songs WHERE tadb_id = "{song_id}";')
-    data = list(connection.execute(query).fetchone())
+    data = connection.execute(query).fetchone()
     if not data: #if the song id is wrong
         song_id = '32861727'
         query = text(f'SELECT * FROM Songs WHERE tadb_id = "{song_id}";')
         data = list(connection.execute(query).fetchone())
+    data = list(data)
     song['song_id'] = song_id
     song['song_data'] = data
     song['time_seconds'] = 0
@@ -251,27 +327,14 @@ def admin():
 @app.route('/uploadSong', methods=['GET', 'POST'])
 def uploadSong():
     tadb_id = request.form.get('tadb_id', 0)
-    path = f'https://www.theaudiodb.com/api/v1/json/2/track.php?h={tadb_id}?lan=en'
-    headers = {"x-rapidapi-host": "theaudiodb.p.rapidapi.com"}
-    response = requests.get(path, headers=headers).json()
-    name = response['track'][0]['strTrack']
-    artist = response['track'][0]['idArtist']
-    if not connection.execute(text('SELECT * FROM Users WHERE tadb_id=:artist;'), {'artist':artist,}).fetchall():
-        create_artist(artist)
     lyrics = request.form.get('lyrics', None)
-    if not lyrics:
-        lyrics = response['track'][0]['strTrackLyrics']
-    genre = response['track'][0]['strGenre']
     fileobject = request.files.get('file', None)
     print(name, artist, lyrics, fileobject, genre)
     if not fileobject.filename:
         flash('File needed to upload song')
     else:
-        #filename = secure_filename(fileobject.filename)
         fileobject.save(os.path.join('./static/music/', f'{tadb_id}.mp3'))
-        query = text('INSERT INTO Songs(tadb_id, name, lyrics, artist, genre) VALUES (:tadb_id, :name, :lyrics, :artist, :genre);')
-        connection.execute(query, {'tadb_id':tadb_id, 'name':name, 'lyrics':lyrics, 'artist':artist, 'genre':genre})
-        connection.commit()
+        create_song(tadb_id, lyrics)
     return redirect(url_for('admin'))
 
 #create artist method (sub-process of admin page)
