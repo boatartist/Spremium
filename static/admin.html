@@ -1,0 +1,29 @@
+a{% extends 'base.html' %}
+
+{% block main %}
+    <h2>Admin page</h2>
+    <form method='post' name='uploadSong' id='uploadSong' action='/uploadSong' enctype="multipart/form-data">
+        <h3>upload song</h3>
+        <label for='tadb_id'>tadb ID: </label><input name='tadb_id' id='tadb_id' type='text' required><br>
+        <label for='lyrics'>Optional lyrics: </label><textarea name='lyrics' id='lyrics'></textarea><br>
+        <label for='file'>File: </label><input type='file' accept='audio/*' name='file' id='file' required><br>
+        <button type='submit'>Upload Song</button>
+    </form><br>
+
+    <form method='post' name='createArtist' id='createArtist' action='/createArtist'>
+        <h3>create artist</h3>
+        <label for='tadb_id'>TADB ID: </label><input name='tadb_id' id='tadb_id' type='text' required><br>
+        <button type='submit'>Create Artist</button>
+    </form><br>
+
+    <form method='post' name='createAlbum' id='createAlbum' action='/createAlbum'>
+        <h3>create album</h3>
+        <label for='tadb_id'>TADB_ID: </label><input id='tadb_id' name='tadb_id'>
+        <select id='songs' name='songs' multiple required>
+            {% for song in session['songs'] %}
+                <option value='{{song}}'>{{session['songs'][song][0]}}</option>
+            {% endfor %}
+        </select>
+        <button type='submit'>Create Album</button>
+    </form>
+{% endblock %}
