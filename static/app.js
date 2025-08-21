@@ -102,7 +102,8 @@ Number.prototype.pad = function(size) {
 
 function startAlbum(){
   albumForm = document.getElementById('songsToAdd');
-  albumForm.submit()
+  document.cookie = 'current_time=0;path="/";';
+  albumForm.submit();
 }
 
 function startAlbumLater(){
