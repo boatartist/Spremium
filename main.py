@@ -329,7 +329,6 @@ def uploadSong():
     tadb_id = request.form.get('tadb_id', 0)
     lyrics = request.form.get('lyrics', None)
     fileobject = request.files.get('file', None)
-    print(name, artist, lyrics, fileobject, genre)
     if not fileobject.filename:
         flash('File needed to upload song')
     else:
